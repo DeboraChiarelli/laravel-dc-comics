@@ -223,6 +223,10 @@ class ComicsTableSeeder extends Seeder
                 ],
             ],
         ];
+
+        foreach ($comics as $comicData) {
+            Comic::create($comicData);
+        }
     }
 }
 

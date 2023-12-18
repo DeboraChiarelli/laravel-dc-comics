@@ -19,4 +19,14 @@ class ComicController extends Controller
         return view('comics.show', compact('comic')); // Faccio ritornare la vista 'comics.show', passando i dettagli del fumetto come variabile
     }
 
+    public function create() // Chiamo il metodo create per mostrare il formulario per creare un nuovo fumetto.
+    {
+    return view('comics.create'); // In questo modo mi restituisce la vista comics.create, che si trova in create.blade.php.
+    }
+
+    public function store(Request $request) // Questo metodo gestisce i dati inviati tramite il metodo create. Quando l'utente invia il formulario (utilizzando il metodo POST), viene richiamato questo metodo.
+    {
+    // Diedump dei parametri
+    dd($request->all());
+    }
 }

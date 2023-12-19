@@ -48,5 +48,20 @@ class ComicController extends Controller
         $comic = Comic :: FindOrFail($id);
         return view("comics.edit", compact("comic"));
     }
+    public function update(Request $request, $id)
+    {
+    $data = $request->validate([
+        "title" => "required|max:100",
+        "description" => "nullable|max:10000",
+        "thumb" => ["required", "url", "min:3", "max:255"],
+        "price" => "required|decimal|min:1|max:50",
+        "series" => "required|min:1|max:70",
+        "sale_date" => "required|date|max:70",
+        "type" => "required|min:1|max:70"
+    ]);
+    $comic = Comic :: findOrFail($id);
+    $comic->update($data);
+    return redirect()->route('comics.show', $comic->id);
+    }
 
 }

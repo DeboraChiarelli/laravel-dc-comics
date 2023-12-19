@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Comic;
 
 class ComicController extends Controller
 {
@@ -28,18 +29,24 @@ class ComicController extends Controller
     {
     // Diedump dei parametri
     // dd($request->all());
-    $data =  $request -> validate(
-        [
-         "title" => "required|max: 100",
-         "description" => "nullable|max: 10000",
-         "thumb" => "required|min:3|max:255",
-         "price" => "required|min:1|max:50",
-         "series" => "required|min:1|max:70",
-         "sale_date" => "required|date|max:70",
-         "type" => "required|min:1|max:70"
-        ],
-     );
-     $comic = Comic :: create($data);
-     return redirect() -> route("comic.show", $comic -> id);
+    $data = $request->validate([ // Utilizzo metodo validate affiché i dati inviati siano corretti. Il prezzo deve essere numerico, la data deve essere una data valida e l'URL dell'immagine deve essere valido.
+
+        "title" => "required|max:100",
+        "description" => "nullable|max:10000",
+        "thumb" => "required|min:3|max:255",
+        "price" => "required|decimal|min:1|max:50", // Ho aggiunto |decimal alla regola di validazione del prezzo per assicurarmi che il prezzo sia un valore deciamle.
+        "series" => "required|min:1|max:70",
+        "sale_date" => "required|date",
+        "type" => "required|min:1|max:70"
+    ]);
+
+    $comic = Comic::create($data);
+    return redirect()->route("comics.show", $comic->id);
     }
+
+    public function edit($id){
+        $comic = Comic :: FindOrFail($id);
+        return view("comics.edit", compact("comic"));
+    }
+
 }
